@@ -1,0 +1,2 @@
+# Price-Calculator-Kata
+Exercise
