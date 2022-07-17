@@ -2,6 +2,9 @@ namespace Prog
 {
     public class ProductPriceCalculator
     {
+        private ProductReporter? _reporter;
+        public void SetReporter(ProductReporter value) => _reporter = value;
+
         private double _taxPercentage = 0.20;
         public double TaxPercentage
         {
@@ -15,7 +18,7 @@ namespace Prog
                 _taxPercentage = value;
             }
         }
-
+ 
         private double _discountPercentage = 0;
         public double DiscountPercentage
         {
@@ -27,18 +30,20 @@ namespace Prog
                     throw new ArgumentException("discount percentage must be between 0 and 1.");
                 }
                 _discountPercentage = value;
+                _reporter?.ReportAllDiscounts();
             }
         }
+
         private double RoundTwoDecimalPlaces(double value) => Math.Round(value * 100) / 100;
-        public double TaxAmount(Product product) 
-            => RoundTwoDecimalPlaces(TaxPercentage * product.Price); 
-        public double PriceAfterTax(Product product) 
-            => RoundTwoDecimalPlaces(product.Price + TaxAmount(product)); 
-        public double DiscountAmount(Product product) 
+        public double TaxAmount(Product product)
+            => RoundTwoDecimalPlaces(TaxPercentage * product.Price);
+        public double PriceAfterTax(Product product)
+            => RoundTwoDecimalPlaces(product.Price + TaxAmount(product));
+        public double DiscountAmount(Product product)
             => RoundTwoDecimalPlaces(DiscountPercentage * product.Price);
-        public double PriceAfterDiscount(Product product) 
+        public double PriceAfterDiscount(Product product)
             => RoundTwoDecimalPlaces(product.Price - DiscountAmount(product));
-        public double PriceAfterTaxAndDiscount(Product product) 
+        public double PriceAfterTaxAndDiscount(Product product)
             => RoundTwoDecimalPlaces(product.Price + TaxAmount(product) - DiscountAmount(product));
     }
 }
