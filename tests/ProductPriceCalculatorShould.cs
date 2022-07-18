@@ -31,41 +31,79 @@ public class ProductPriceCalculatorShould
     }
 
     [Theory]
-    [InlineData(20.25, 16.20, 0.20)]
-    public void CalculatePriceAfterDiscount(double priceBeforeDiscount, double priceAfterDiscount, double discountRate)
-    {
-        var product = new Product()
-        {
-            Price = priceBeforeDiscount
-        };
-        _calculator.DiscountPercentage = discountRate;
-        Assert.Equal(_calculator.PriceAfterDiscount(product), priceAfterDiscount);
-    }
-
-    [Theory]
     [InlineData(20.25, 4.05, 0.20)]
     [InlineData(20.25, 4.25, 0.21)]
-    public void CalculateDiscountAmount(double price, double discountAmount, double discountRate)
+    public void CalculateUniversalDiscountAmount(double price, double discountAmount, double discountRate)
     {
         var product = new Product()
         {
             Price = price
         };
-        _calculator.DiscountPercentage = discountRate;
-        Assert.Equal(_calculator.DiscountAmount(product), discountAmount);
+        _calculator.UniversalDiscountPercentage = discountRate;
+        Assert.Equal(_calculator.UniversalDiscountAmount(product), discountAmount);
     }
 
     [Theory]
     [InlineData(20.25, 21.26, 0.20, 0.15)]
-    public void CalculatePriceAfterTaxAndDiscount(double priceBefore, double priceAfter, double taxRate, double discountRate)
+    public void CalculatePriceAfterTaxAndUniversalDiscount(double priceBefore, double priceAfter,
+    double taxRate, double discountRate)
     {
         var product = new Product()
         {
             Price = priceBefore
         };
-        _calculator.TaxPercentage= taxRate;
-        _calculator.DiscountPercentage = discountRate;
-        Assert.Equal(_calculator.PriceAfterTaxAndDiscount(product), priceAfter);
+        _calculator.TaxPercentage = taxRate;
+        _calculator.UniversalDiscountPercentage = discountRate;
+        Assert.Equal(_calculator.PriceAfterTaxAndDiscounts(product), priceAfter);
+    }
+
+    [Theory]
+    [InlineData(20.25, 4.05, 123, 123, 0.2)]
+    [InlineData(20.25, 0, 331, 133, 0.2)]
+    [InlineData(100, 15, 12, 12, 0.15)]
+    public void CalculateUPCDiscountAmount(double price, double discountAmount, uint discountUPC,
+    uint productUPC, double UPCDiscountPercentage)
+    {
+        var product = new Product()
+        {
+            Price = price,
+            UPC = productUPC,
+        };
+        _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
+        Assert.Equal(_calculator.UPCDiscountAmount(product), discountAmount);
+    }
+
+    [Theory]
+    [InlineData(20.25, 19.84, 12345, 12345, 0.2, 0.15, 0.07)]
+    [InlineData(20.25, 21.46, 789, 12345, 0.21, 0.15, 0.07)]
+    public void CalculatePriceAfterTaxAndAllDiscounts(double priceBefore, double priceAfter, uint discountUPC,
+        uint productUPC, double taxPercentage, double universalDiscountPercentage, double UPCDiscountPercentage)
+    {
+        var product = new Product()
+        {
+            Price = priceBefore,
+            UPC = productUPC,
+        };
+        _calculator.TaxPercentage = taxPercentage;
+        _calculator.UniversalDiscountPercentage = universalDiscountPercentage;
+        _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
+        Assert.Equal(_calculator.PriceAfterTaxAndDiscounts(product), priceAfter);
+    }
+
+    [Theory]
+    [InlineData(20.25, 4.46, 12345, 12345, 0.15, 0.07)]
+    [InlineData(20.25, 3.04, 789, 12345, 0.15, 0.07)]
+    public void CalculateAllDiscountsAmount(double priceBefore, double priceAfter, uint discountUPC,
+            uint productUPC, double universalDiscountPercentage, double UPCDiscountPercentage)
+    {
+        var product = new Product()
+        {
+            Price = priceBefore,
+            UPC = productUPC,
+        };
+        _calculator.UniversalDiscountPercentage = universalDiscountPercentage;
+        _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
+        Assert.Equal(_calculator.AllDiscountsAmount(product), priceAfter);
     }
 
 }

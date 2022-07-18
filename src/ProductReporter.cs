@@ -27,11 +27,17 @@ namespace Prog
             }
         }
 
+        public void ReportSingleDiscountByUPC(uint upc)
+        {
+            var product = _products.FirstOrDefault(p => p.UPC == upc);
+            if (product == null) return;
+            ReportSingleDiscount(product);
+        }
         public void ReportSingleDiscount(Product product) => Console.WriteLine(SingleReport(product));
-
         private string SingleReport(Product product)
             => product.ToString()
-            + $"\nFinal Price: {_calculator.PriceAfterTaxAndDiscount(product)}\n"
-            + (_calculator.DiscountPercentage > 0 ? $"Discount = {_calculator.DiscountAmount(product)}.\n" : "");
+            + $"\nFinal Price: {_calculator.PriceAfterTaxAndDiscounts(product)}\n"
+            + (_calculator.AllDiscountsAmount(product) > 0 ? 
+            $"Total Discount = {_calculator.AllDiscountsAmount(product)}.\n" : "");
     }
 }

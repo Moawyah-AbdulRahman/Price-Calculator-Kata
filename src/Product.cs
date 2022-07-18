@@ -4,11 +4,12 @@ namespace Prog
     {
         public Product() { }
         public Product(ProductReporter reporter) => reporter.Subscribe(this);
-        public Product(ProductReporter reporter, string name, uint upc, double price) : this(reporter) 
+        public Product(ProductReporter reporter, string name, uint upc, double price) 
         {
             Name = name;
             UPC = upc;
             Price = price;
+            reporter.Subscribe(this);
         }
         public string? Name { get; set; }
         public uint UPC { get; set; }

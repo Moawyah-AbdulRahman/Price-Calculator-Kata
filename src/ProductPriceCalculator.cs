@@ -18,32 +18,44 @@ namespace Prog
                 _taxPercentage = value;
             }
         }
- 
-        private double _discountPercentage = 0;
-        public double DiscountPercentage
+
+        private (uint UPC, double Percentage) _upcDiscount;
+        public (uint UPC, double Percentage) UPCDiscount { get; }
+        public void SetUPCDiscount(uint upc, double percentage)
         {
-            get => _discountPercentage;
+            if (percentage < 0 || percentage >= 1)
+            {
+                throw new ArgumentException("discount percentage must be between 0 and 1.");
+            }
+            _upcDiscount = (upc, percentage);
+            _reporter?.ReportSingleDiscountByUPC(upc);
+        }
+        private double _universalDiscountPercentage = 0;
+        public double UniversalDiscountPercentage
+        {
+            get => _universalDiscountPercentage;
             set
             {
                 if (value < 0 || value >= 1)
                 {
                     throw new ArgumentException("discount percentage must be between 0 and 1.");
                 }
-                _discountPercentage = value;
+                _universalDiscountPercentage = value;
                 _reporter?.ReportAllDiscounts();
             }
         }
-
         private double RoundTwoDecimalPlaces(double value) => Math.Round(value * 100) / 100;
         public double TaxAmount(Product product)
             => RoundTwoDecimalPlaces(TaxPercentage * product.Price);
         public double PriceAfterTax(Product product)
             => RoundTwoDecimalPlaces(product.Price + TaxAmount(product));
-        public double DiscountAmount(Product product)
-            => RoundTwoDecimalPlaces(DiscountPercentage * product.Price);
-        public double PriceAfterDiscount(Product product)
-            => RoundTwoDecimalPlaces(product.Price - DiscountAmount(product));
-        public double PriceAfterTaxAndDiscount(Product product)
-            => RoundTwoDecimalPlaces(product.Price + TaxAmount(product) - DiscountAmount(product));
+        public double UniversalDiscountAmount(Product product)
+            => RoundTwoDecimalPlaces(UniversalDiscountPercentage * product.Price);
+        public double UPCDiscountAmount(Product product)
+            => _upcDiscount.UPC == product.UPC ? RoundTwoDecimalPlaces(_upcDiscount.Percentage * product.Price) : 0.0;
+        public double PriceAfterTaxAndDiscounts(Product product)
+            => Math.Max(RoundTwoDecimalPlaces( product.Price + TaxAmount(product) - AllDiscountsAmount(product)),0.0);
+        public double AllDiscountsAmount(Product product) 
+            => UniversalDiscountAmount(product) + UPCDiscountAmount(product);
     }
 }
