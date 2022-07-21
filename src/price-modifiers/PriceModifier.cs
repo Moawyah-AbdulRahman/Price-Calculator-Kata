@@ -1,9 +1,9 @@
 namespace Prog
 {
-    public interface PriceModifier
+    public abstract class PriceModifier
     {
-        double GetAmount(Product product);
-        virtual void ModifyPrice(Product product)
+        public abstract double GetAmount(Product product);
+        public virtual void ModifyPrice(Product product)
         {
             product.CurrentPrice += GetAmount(product);
         }

@@ -4,23 +4,22 @@
     {
         public static void Main(string[] args)
         {
-            /*var calculator = new ProductPriceCalculator()
-            {
-                UniversalDiscountPercentage = 0.15,
-                TaxPercentage = 0.2,
-            };
-            calculator.SetUPCDiscount(12345, 0.07);
-            var reporter = new ProductReporter(calculator);
-            var prod1 = new Product(reporter, "The Little Prince", 12345, 20.25);
-            var prod2 = new Product(reporter, "The Big Prince", 789, 20.25);
-            */
-            var product = new Product()
-            {
-                Name = "the little prince",
-                UPC = 12345,
-                BasePrice = 20.25
-            };
-            
+            PriceModifier modifier = new CompositeModifier(
+             new Tax(0.2),
+             new UniversalDiscount(0.15),
+             new SpecialDiscount(12345, 0.07)
+            );
+            ProductReporter case1 = new ConsoleProductReporter(modifier);
+            var product = new Product(case1, "The little prince", 12345, 20.25);
+
+            modifier = new CompositeModifier(
+                new Tax(0.21),
+                new UniversalDiscount(0.15),
+                new SpecialDiscount(789, 0.07)
+            );
+            ProductReporter case2 = new ConsoleProductReporter(modifier);
+            case2.Subscribe(product);
+
         }
     }
 }

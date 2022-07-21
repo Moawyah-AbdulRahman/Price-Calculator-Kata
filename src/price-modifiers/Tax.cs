@@ -13,9 +13,9 @@ namespace Prog
             _rate = rate;
         }
 
-        public double GetAmount(Product product)
+        public override double GetAmount(Product product)
         {
-            return (product.CurrentPrice * _rate).RoundTwoDecimalPlaces();
+            return (product.BasePrice * _rate).RoundTwoDecimalPlaces();
         }
 
     }

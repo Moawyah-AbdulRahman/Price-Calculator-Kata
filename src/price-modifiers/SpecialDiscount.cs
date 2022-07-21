@@ -1,6 +1,6 @@
 namespace Prog
 {
-    public class SpecialDiscount : IDiscount
+    public class SpecialDiscount : Discount
     {
         private readonly uint _upc;
         private readonly double _discountRate;
@@ -11,7 +11,7 @@ namespace Prog
             _upc = upc;
             _discountRate = discountRate;
         }
-        public double GetAmount(Product product)
+        public override double GetAmount(Product product)
         {
             return product.UPC == _upc ? -product.BasePrice * _discountRate : 0.0;
         }

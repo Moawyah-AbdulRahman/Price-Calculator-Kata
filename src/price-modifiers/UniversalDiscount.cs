@@ -1,6 +1,6 @@
 namespace Prog
 {
-    public class UniversalDiscount : IDiscount
+    public class UniversalDiscount : Discount
     {
         private readonly double _rate;
 
@@ -11,7 +11,7 @@ namespace Prog
             _rate = rate;
         }
 
-        public double GetAmount(Product product)
+        public override double GetAmount(Product product)
         {
             return -(_rate * product.BasePrice).RoundTwoDecimalPlaces();
         }

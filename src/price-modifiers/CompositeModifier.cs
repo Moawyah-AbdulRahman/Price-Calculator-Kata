@@ -11,7 +11,7 @@ namespace Prog
             _modifiers = modifiers;
         }
 
-        public double GetAmount(Product product)
+        public override double GetAmount(Product product)
         {
             return _modifiers.Aggregate(0.0, (a, m) => a + m.GetAmount(product));
         }
