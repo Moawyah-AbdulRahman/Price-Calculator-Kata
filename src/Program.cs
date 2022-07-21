@@ -2,20 +2,18 @@
 {
     public static class Program
     {
-        public static Func<Product, string> PriceReport = product =>
-        $"Product price reported as ${product.Price} before tax and ${product.PriceWithTax} after {Product.TaxPercentage * 100}% tax.";
         public static void Main(string[] args)
         {
-            var product = new Product()
+            var calculator = new ProductPriceCalculator()
             {
-                Name = "The Little Prince",
-                UPC = 12345,
-                Price = 20.25,
+                UniversalDiscountPercentage = 0.15,
+                TaxPercentage = 0.2,
             };
-            Console.WriteLine(product);
-            Console.WriteLine(PriceReport(product));
-            Product.TaxPercentage = 0.21;
-            Console.WriteLine(PriceReport(product));
+            calculator.SetUPCDiscount(12345, 0.07);
+            var reporter = new ProductReporter(calculator);
+            var prod1 = new Product(reporter, "The Little Prince", 12345, 20.25);
+            var prod2 = new Product(reporter, "The Big Prince", 789, 20.25);
+
         }
     }
 }

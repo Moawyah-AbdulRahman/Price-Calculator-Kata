@@ -2,24 +2,18 @@ namespace Prog
 {
     public class Product
     {
-        private static double _taxPercentage = 0.20;
-        public static double TaxPercentage
+        public Product() { }
+        public Product(ProductReporter reporter) => reporter.Subscribe(this);
+        public Product(ProductReporter reporter, string name, uint upc, double price) 
         {
-            get => _taxPercentage;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentException("Tax percentage cannot be negative.");
-                }
-                _taxPercentage = value;
-            }
+            Name = name;
+            UPC = upc;
+            Price = price;
+            reporter.Subscribe(this);
         }
-
         public string? Name { get; set; }
-
         public uint UPC { get; set; }
-
+        private double RoundTwoDecimalPlaces(double value) => Math.Round(value * 100) / 100;
         private double _price;
         public double Price
         {
@@ -30,15 +24,12 @@ namespace Prog
                 {
                     throw new ArgumentException("price cannot be negative.");
                 }
-                _price = Round(value);
+                _price = RoundTwoDecimalPlaces(value);
             }
         }
 
-        private double Round(double value) => Math.Round(value * 100) / 100;
-        public double PriceWithTax { get => Round((1 + TaxPercentage) * Price); }
-
         public override string ToString()
-            => $"Product: Name= {Name}, UPC= {UPC}, Price Before Tax= {Price}, Price After Tax: {PriceWithTax}.";
+            => $"Product: Name= {Name}, UPC= {UPC}, Price= {Price}.";
 
     }
 }
