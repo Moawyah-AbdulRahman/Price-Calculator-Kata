@@ -1,15 +1,17 @@
+using System.Linq;
+
 namespace Prog
 {
     public class ProductReporter
     {
         private ICollection<Product> _products;
-        private ProductPriceCalculator _calculator;
-        public ProductReporter(ProductPriceCalculator calculator)
+        private PriceModifier _priceModifier;
+        public ProductReporter(PriceModifier priceModifier)
         {
+            if (priceModifier == null)
+                throw new NullReferenceException("Price modifier cannot be null.");
+            _priceModifier = priceModifier;
             _products = new List<Product>();
-            _calculator = calculator;
-            calculator.SetReporter(this);
-            ReportAllDiscounts();
         }
         public void Subscribe(Product product)
         {
@@ -19,25 +21,29 @@ namespace Prog
 
         public void ReportAllDiscounts()
         {
-            var reports = from product in _products
-                          select SingleReport(product);
-            foreach (var report in reports)
+            foreach (var product in _products)
             {
-                Console.WriteLine(report);
+                Console.WriteLine(GetSingleReport(product));
             }
         }
 
-        public void ReportSingleDiscountByUPC(uint upc)
+        public void ReportSingleDiscount(Product product)
         {
-            var product = _products.FirstOrDefault(p => p.UPC == upc);
-            if (product == null) return;
-            ReportSingleDiscount(product);
+            Console.WriteLine(GetSingleReport(product));
         }
-        public void ReportSingleDiscount(Product product) => Console.WriteLine(SingleReport(product));
-        private string SingleReport(Product product)
-            => product.ToString()
-            + $"\nFinal Price: {_calculator.PriceAfterTaxAndDiscounts(product)}\n"
-            + (_calculator.AllDiscountsAmount(product) > 0 ? 
-            $"Total Discount = {_calculator.AllDiscountsAmount(product)}.\n" : "");
+
+        private string GetSingleReport(Product product)
+        {
+            return product.ToString() + $"\nFinal Price: {product.CurrentPrice}\n";
+        }
+
+        private double GetDiscountAmount(Product product)
+        {
+            if(_priceModifier is CompositeModifier)
+            {
+                var x= (_priceModifier as CompositeModifier)!._modifiers;
+            }
+            return 0.0;
+        }
     }
 }
