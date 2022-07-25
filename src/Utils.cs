@@ -16,7 +16,7 @@ namespace Prog
 
             if (priceModifier is CompositeModifier)
             {
-                return GetDiscountInCompositeModifier((priceModifier as CompositeModifier)!, product);
+                return GetDiscountInCompositeModifier((CompositeModifier)priceModifier, product);
             }
 
             if (priceModifier is Discount)
@@ -28,18 +28,22 @@ namespace Prog
         private static double GetDiscountInCompositeModifier(CompositeModifier priceModifier, Product product)
         {
             double priceBeforeModification = product.CurrentPrice;
-            product.CurrentPrice = product.BasePrice;
 
             double total = 0.0;
             foreach (var modifier in priceModifier._modifiers)
             {
                 if (modifier is Discount)
                     total += -modifier.GetAmount(product);
-                modifier.ModifyPrice(product);
+
+                if (modifier is CompositeModifier)
+                    total += GetDiscountInCompositeModifier((CompositeModifier)modifier, product);
+
+                if (priceModifier is SequentialModifier)
+                    modifier.ModifyPrice(product);
+                
             }
 
             product.CurrentPrice = priceBeforeModification;
-
             return total;
         }
     }

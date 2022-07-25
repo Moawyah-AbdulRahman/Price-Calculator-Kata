@@ -10,7 +10,7 @@ namespace Prog
         {
             foreach (var product in _products)
             {
-                Console.WriteLine(GetSingleReport(product));
+                ReportSingleDiscount(product);
             }
         }
 

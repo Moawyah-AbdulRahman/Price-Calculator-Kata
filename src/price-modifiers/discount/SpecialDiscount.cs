@@ -13,7 +13,7 @@ namespace Prog
         }
         public override double GetAmount(Product product)
         {
-            return product.UPC == _upc ? -product.BasePrice * _discountRate : 0.0;
+            return product.UPC == _upc ? -product.CurrentPrice * _discountRate : 0.0;
         }
     }
 }
