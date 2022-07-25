@@ -30,12 +30,18 @@ namespace Prog
         protected string GetSingleReport(Product product)
         {
             var discountAmount = _priceModifier.GetDiscountAmount(product).RoundTwoDecimalPlaces();
+            var taxAmount =_priceModifier.GetTaxAmount(product);
             double priceBeforeModification = product.CurrentPrice;
             product.CurrentPrice = product.BasePrice;
             _priceModifier.ModifyPrice(product);
             var tbr = product.ToString()
                 + $"\nFinal Price: {product.CurrentPrice}$\n"
+                + (taxAmount > 0 ? $"Tax: {taxAmount}$\n" : "")
                 + (discountAmount > 0 ? $"Discount: {discountAmount}$\n" : "");
+            foreach(var expense in _priceModifier.GetExpenses())
+            {
+                tbr += $"{expense.Discription}: {expense.GetAmount(product)}$\n";
+            }
 
             product.CurrentPrice = priceBeforeModification;
 
