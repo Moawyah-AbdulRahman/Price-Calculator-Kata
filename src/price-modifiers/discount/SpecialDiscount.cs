@@ -11,9 +11,11 @@ namespace Prog
             _upc = upc;
             _discountRate = discountRate;
         }
-        public override double GetAmount(Product product)
+        public override Price GetAmount(Product product)
         {
-            return product.UPC == _upc ? -product.CurrentPrice * _discountRate : 0.0;
+            return product.UPC == _upc ?
+                -product.CurrentPrice * _discountRate :
+                new Price(0.0, product.CurrentPrice.Currency);
         }
     }
 }

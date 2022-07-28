@@ -6,14 +6,14 @@ namespace Prog
 
         public PercentExpense(string discription, double rate) : base(discription)
         {
-            if(rate<0)
+            if (rate < 0)
                 throw new ArgumentException("Percent expense cannot be negative");
             _rate = rate;
         }
 
-        public override double GetAmount(Product product)
+        public override Price GetAmount(Product product)
         {
-            return (_rate * product.BasePrice).RoundTwoDecimalPlaces();
+            return (product.BasePrice * _rate).RoundTwoDecimalPlaces();
         }
     }
 }

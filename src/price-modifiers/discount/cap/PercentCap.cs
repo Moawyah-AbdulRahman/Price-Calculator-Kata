@@ -11,9 +11,9 @@ namespace Prog
             this._rate = rate;
         }
 
-        public override double GetAmount(Product product)
+        public override Price GetAmount(Product product)
         {
-            return Math.Max(_modifier.GetAmount(product), -(product.CurrentPrice*_rate).RoundTwoDecimalPlaces());
+            return PriceExtensions.Max(_modifier.GetAmount(product), -(product.CurrentPrice*_rate).RoundTwoDecimalPlaces());
         }
     }
 }

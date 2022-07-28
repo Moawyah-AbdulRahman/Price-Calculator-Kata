@@ -3,7 +3,7 @@ namespace Prog
     public static class PriceModifierExtensions
     {
 
-        public static double GetDiscountAmount(this PriceModifier priceModifier, Product product)
+        public static Price GetDiscountAmount(this PriceModifier priceModifier, Product product)
         {
             GuardAgainstNulls(priceModifier, product);
 
@@ -15,10 +15,10 @@ namespace Prog
             if (priceModifier is Discount)
                 return -priceModifier.GetAmount(product);
 
-            return 0.0;
+            return new Price(0.0,product.CurrentPrice.Currency);
         }
 
-        public static double GetTaxAmount(this PriceModifier priceModifier, Product product)
+        public static Price GetTaxAmount(this PriceModifier priceModifier, Product product)
         {
             GuardAgainstNulls(priceModifier, product);
 
@@ -26,14 +26,17 @@ namespace Prog
                 return priceModifier.GetAmount(product);
 
             if (priceModifier is not CompositeModifier)
-                return 0;
+                return new Price(0, product.CurrentPrice.Currency);
 
-            return ((CompositeModifier)priceModifier)._modifiers.Aggregate(0.0, (s, m) => s + m.GetTaxAmount(product));
+            return ((CompositeModifier)priceModifier)
+            ._modifiers.Aggregate(new Price(0.0, product.CurrentPrice.Currency),
+                                 (s, m) => s + m.GetTaxAmount(product));
         }
 
         public static IEnumerable<Expense> GetExpenses(this PriceModifier priceModifier)
         {
-            GuardAgainstNulls(priceModifier, new Product());
+            if (priceModifier is null)
+                throw new ArgumentException("Cannot call GetDiscountAmount on null.");
             List<Expense> tbr = new List<Expense>();
             if (priceModifier is not CompositeModifier)
                 return tbr;
@@ -56,11 +59,11 @@ namespace Prog
                 throw new ArgumentException("Cannot calculate discount amount of null.");
         }
 
-        private static double GetDiscountInCompositeModifier(CompositeModifier priceModifier, Product product)
+        private static Price GetDiscountInCompositeModifier(CompositeModifier priceModifier, Product product)
         {
-            double priceBeforeModification = product.CurrentPrice;
+            var priceBeforeModification = product.CurrentPrice;
 
-            double total = 0.0;
+            var total = new Price(0.0, product.CurrentPrice.Currency);
             foreach (var modifier in priceModifier._modifiers)
             {
                 if (modifier is Discount)

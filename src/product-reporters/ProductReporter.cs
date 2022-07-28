@@ -31,7 +31,7 @@ namespace Prog
         {
             var discountAmount = _priceModifier.GetDiscountAmount(product).RoundTwoDecimalPlaces();
             var taxAmount =_priceModifier.GetTaxAmount(product);
-            double priceBeforeModification = product.CurrentPrice;
+            var priceBeforeModification = product.CurrentPrice;
             product.CurrentPrice = product.BasePrice;
             _priceModifier.ModifyPrice(product);
             var tbr = product.ToString()

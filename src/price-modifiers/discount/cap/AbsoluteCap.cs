@@ -2,18 +2,18 @@ namespace Prog
 {
     public class AbsoluteCap : Cap
     {
-        private readonly double _value;
+        private readonly Price _value;
 
-        public AbsoluteCap(CompositeModifier modifier, double value) : base(modifier)
+        public AbsoluteCap(CompositeModifier modifier, Price value) : base(modifier)
         {
             if (value < 0)
                 throw new ArgumentException("AbsoluteCap's value cannot be negative.");
             this._value = value;
         }
 
-        public override double GetAmount(Product product)
+        public override Price GetAmount(Product product)
         {
-            return Math.Max(_modifier.GetAmount(product), -_value);
+            return PriceExtensions.Max(_modifier.GetAmount(product), -_value);
         }
     }
 }

@@ -5,10 +5,10 @@ namespace Prog
 
         public SequentialModifier(params PriceModifier[] modifiers) : base(modifiers) { }
 
-        public override double GetAmount(Product product)
+        public override Price GetAmount(Product product)
         {
-            double priceBeforeModification = product.CurrentPrice;
-            double tbr = 0;
+            Price priceBeforeModification = product.CurrentPrice;
+            Price tbr = new Price(0, product.CurrentPrice.Currency);
             foreach (var modifier in _modifiers)
             {
                 tbr += modifier.GetAmount(product);
