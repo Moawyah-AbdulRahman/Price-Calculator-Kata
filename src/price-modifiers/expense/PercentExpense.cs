@@ -13,7 +13,7 @@ namespace Prog
 
         public override Price GetAmount(Product product)
         {
-            return (product.BasePrice * _rate).RoundTwoDecimalPlaces();
+            return (product.BasePrice * _rate).RoundFourDecimalPlaces();
         }
     }
 }

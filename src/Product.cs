@@ -25,7 +25,7 @@ namespace Prog
             {
                 if (value is null)
                     throw new NullReferenceException("Product's price cannot be null.");
-                CurrentPrice = _basePrice = value.RoundTwoDecimalPlaces();
+                CurrentPrice = _basePrice = value.RoundFourDecimalPlaces();
             }
         }
 
@@ -33,7 +33,7 @@ namespace Prog
         public Price CurrentPrice
         {
             get => _currentPrice;
-            set => _currentPrice = PriceExtensions.Max(value.RoundTwoDecimalPlaces(), new Price(0.0, value.Currency));
+            set => _currentPrice = PriceExtensions.Max(value.RoundFourDecimalPlaces(), new Price(0.0, value.Currency));
         }
 
         public override string ToString()

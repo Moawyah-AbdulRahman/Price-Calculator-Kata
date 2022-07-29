@@ -2,10 +2,11 @@ namespace Prog
 {
     public partial class Price
     {
-        public Price RoundTwoDecimalPlaces()
+        public Price RoundFourDecimalPlaces()
         {
-            return new Price(Math.Round(Value * 100) / 100, Currency);
+            return new Price(Math.Round(Value * 10000) / 10000, Currency);
         }
+        
 
         public int CompareTo(Price? other)
         {

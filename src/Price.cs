@@ -18,7 +18,7 @@ namespace Prog
 
         public override string ToString()
         {
-            return Value +" "+ Currency;
+            return Math.Round(Value*100)/100 +" "+ Currency;
         }
 
     }

@@ -13,7 +13,7 @@ namespace Prog
 
         public override Price GetAmount(Product product)
         {
-            return PriceExtensions.Max(_modifier.GetAmount(product), -(product.CurrentPrice*_rate).RoundTwoDecimalPlaces());
+            return PriceExtensions.Max(_modifier.GetAmount(product), -(product.CurrentPrice*_rate).RoundFourDecimalPlaces());
         }
     }
 }

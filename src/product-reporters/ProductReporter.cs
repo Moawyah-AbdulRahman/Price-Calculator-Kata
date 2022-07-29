@@ -29,7 +29,7 @@ namespace Prog
 
         protected string GetSingleReport(Product product)
         {
-            var discountAmount = _priceModifier.GetDiscountAmount(product).RoundTwoDecimalPlaces();
+            var discountAmount = _priceModifier.GetDiscountAmount(product).RoundFourDecimalPlaces();
             var taxAmount =_priceModifier.GetTaxAmount(product);
             var priceBeforeModification = product.CurrentPrice;
             product.CurrentPrice = product.BasePrice;

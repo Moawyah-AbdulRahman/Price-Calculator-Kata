@@ -8,7 +8,7 @@ namespace Prog
         {
             if(value<0)
                 throw new ArgumentException("Absolute expense value cannot be negative");
-            this._value = value.RoundTwoDecimalPlaces();
+            this._value = value.RoundFourDecimalPlaces();
         }
 
         public override Price GetAmount(Product product)
