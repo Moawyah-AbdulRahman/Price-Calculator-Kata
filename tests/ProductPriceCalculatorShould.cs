@@ -11,10 +11,10 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = priceBeforeTax
+            BasePrice = priceBeforeTax
         };
         _calculator.TaxPercentage = taxRate;
-        Assert.Equal(_calculator.PriceAfterTax(product), priceAfterTax);
+        Assert.Equal(_calculator.GetPriceAfterTax(product), priceAfterTax);
     }
 
     [Theory]
@@ -24,10 +24,10 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = price
+            BasePrice = price
         };
         _calculator.TaxPercentage = taxRate;
-        Assert.Equal(_calculator.TaxAmount(product), taxAmount);
+        Assert.Equal(_calculator.GetTaxAmount(product), taxAmount);
     }
 
     [Theory]
@@ -37,10 +37,10 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = price
+            BasePrice = price
         };
         _calculator.UniversalDiscountPercentage = discountRate;
-        Assert.Equal(_calculator.UniversalDiscountAmount(product), discountAmount);
+        Assert.Equal(_calculator.GetUniversalDiscountAmount(product), discountAmount);
     }
 
     [Theory]
@@ -50,11 +50,11 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = priceBefore
+            BasePrice = priceBefore
         };
         _calculator.TaxPercentage = taxRate;
         _calculator.UniversalDiscountPercentage = discountRate;
-        Assert.Equal(_calculator.PriceAfterTaxAndDiscounts(product), priceAfter);
+        Assert.Equal(_calculator.GetPriceAfterTaxAndDiscounts(product), priceAfter);
     }
 
     [Theory]
@@ -66,11 +66,11 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = price,
+            BasePrice = price,
             UPC = productUPC,
         };
         _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
-        Assert.Equal(_calculator.UPCDiscountAmount(product), discountAmount);
+        Assert.Equal(_calculator.GetUPCDiscountAmount(product), discountAmount);
     }
 
     [Theory]
@@ -81,13 +81,13 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = priceBefore,
+            BasePrice = priceBefore,
             UPC = productUPC,
         };
         _calculator.TaxPercentage = taxPercentage;
         _calculator.UniversalDiscountPercentage = universalDiscountPercentage;
         _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
-        Assert.Equal(_calculator.PriceAfterTaxAndDiscounts(product), priceAfter);
+        Assert.Equal(_calculator.GetPriceAfterTaxAndDiscounts(product), priceAfter);
     }
 
     [Theory]
@@ -98,12 +98,12 @@ public class ProductPriceCalculatorShould
     {
         var product = new Product()
         {
-            Price = priceBefore,
+            BasePrice = priceBefore,
             UPC = productUPC,
         };
         _calculator.UniversalDiscountPercentage = universalDiscountPercentage;
         _calculator.SetUPCDiscount(discountUPC, UPCDiscountPercentage);
-        Assert.Equal(_calculator.AllDiscountsAmount(product), priceAfter);
+        Assert.Equal(_calculator.GetAllDiscountsAmount(product), priceAfter);
     }
 
 }
