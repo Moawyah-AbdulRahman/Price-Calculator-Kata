@@ -2,6 +2,8 @@ namespace Prog
 {
     public partial class Price : IComparable<Price>
     {
+        public Price() : this(0.0) { }
+
         public Price(double value) : this(value, "USD") { }
         public Price(double value, string currency)
         {
@@ -18,7 +20,7 @@ namespace Prog
 
         public override string ToString()
         {
-            return Math.Round(Value*100)/100 +" "+ Currency;
+            return Math.Round(Value * 100) / 100 + " " + Currency;
         }
 
     }

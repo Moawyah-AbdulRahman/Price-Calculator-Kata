@@ -6,15 +6,15 @@ namespace Prog
     {
         public ConsoleProductReporter(PriceModifier priceModifier) : base(priceModifier) { }
 
-        public override void ReportAllDiscounts()
+        public override void ReportAll()
         {
             foreach (var product in _products)
             {
-                ReportSingleDiscount(product);
+                ReportSingle(product);
             }
         }
 
-        public override void ReportSingleDiscount(Product product)
+        public override void ReportSingle(Product product)
         {
             Console.WriteLine(GetSingleReport(product));
         }
